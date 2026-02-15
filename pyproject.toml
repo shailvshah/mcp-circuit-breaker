@@ -1,0 +1,30 @@
+[project]
+name = "mcp-circuit-breaker"
+version = "0.1.0"
+description = "A localized circuit breaker for MCP agents to prevent infinite loops."
+authors = [{name = "Shail Shah", email = "shail@example.com"}]
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mcp>=1.0.0",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.0.0",
+    "loguru>=0.7.0",
+    "python-dotenv>=1.0.0"
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [{include = "mcp_circuit_breaker", from = "src/python"}]
+
+[tool.poetry.scripts]
+mcp-circuit-breaker = "mcp_circuit_breaker.main:main"
+
+[dependency-groups]
+dev = [
+    "pytest (>=9.0.2,<10.0.0)",
+    "pytest-asyncio (>=1.3.0,<2.0.0)"
+]
