@@ -47,7 +47,7 @@ Copy the contents of `manual_test_config.json` (replacing paths with your own):
       "args": ["-m", "mcp_circuit_breaker"],
       "env": {
         "DOWNSTREAM_COMMAND": "npx",
-        "DOWNSTREAM_ARGS": "[\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/Users/username/Desktop\"]", 
+        "DOWNSTREAM_ARGS": "[\"-y\", \"@modelcontextprotocol/server-filesystem\", \"/Users/username/Desktop\"]",
         "CB_FAILURE_THRESHOLD": "3",
         "CB_RESET_TIMEOUT": "30"
       }
@@ -77,7 +77,7 @@ The Circuit Breaker sits between the Client (Claude/Cursor) and the Server (SaaS
 graph LR
     Client[Claude Desktop] -->|MCP| CB[Circuit Breaker]
     CB -->|MCP| SaaS[SaaS MCP Server]
-    
+
     subgraph "Safety Logic"
     CB -- Monitor --> Store[State Store]
     Store -- Trip --> Intervention[Stop Signal]

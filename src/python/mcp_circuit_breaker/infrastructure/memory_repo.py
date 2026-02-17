@@ -1,12 +1,13 @@
-import asyncio
-from typing import List, Dict, DefaultDict
 from collections import defaultdict
 from datetime import datetime, timedelta
+from typing import DefaultDict, Dict, List
+
 from ..domain.interfaces import StateRepository
-from ..domain.models import ToolCallRecord, CircuitState
+from ..domain.models import CircuitState, ToolCallRecord
+
 
 class InMemoryStateRepository(StateRepository):
-    def __init__(self):
+    def __init__(self) -> None:
         self._records: DefaultDict[str, List[ToolCallRecord]] = defaultdict(list)
         self._states: Dict[str, CircuitState] = {}
         self._state_change_times: Dict[str, datetime] = {}
@@ -15,13 +16,12 @@ class InMemoryStateRepository(StateRepository):
     async def record_call(self, record: ToolCallRecord) -> None:
         self._records[record.tool_name].append(record)
         # Prune old records (optional optimization, maybe strictly not needed for MVP)
-        
-    async def get_recent_calls(self, tool_name: str, window_seconds: int) -> List[ToolCallRecord]:
+
+    async def get_recent_calls(
+        self, tool_name: str, window_seconds: int
+    ) -> List[ToolCallRecord]:
         cutoff = datetime.now() - timedelta(seconds=window_seconds)
-        return [
-            r for r in self._records[tool_name] 
-            if r.timestamp >= cutoff
-        ]
+        return [r for r in self._records[tool_name] if r.timestamp >= cutoff]
 
     async def get_state(self, tool_name: str) -> CircuitState:
         return self._states.get(tool_name, CircuitState.CLOSED)
@@ -35,7 +35,7 @@ class InMemoryStateRepository(StateRepository):
 
     async def get_consecutive_failures(self, tool_name: str) -> int:
         return self._consecutive_failures[tool_name]
-    
+
     async def increment_failures(self, tool_name: str) -> None:
         self._consecutive_failures[tool_name] += 1
 
