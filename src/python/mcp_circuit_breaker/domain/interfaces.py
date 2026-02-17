@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
 from datetime import datetime
-from .models import ToolCallRecord, CircuitState
+from typing import List
+
+from .models import CircuitState, ToolCallRecord
+
 
 class StateRepository(ABC):
     @abstractmethod
@@ -10,7 +12,9 @@ class StateRepository(ABC):
         pass
 
     @abstractmethod
-    async def get_recent_calls(self, tool_name: str, window_seconds: int) -> List[ToolCallRecord]:
+    async def get_recent_calls(
+        self, tool_name: str, window_seconds: int
+    ) -> List[ToolCallRecord]:
         """Get calls for a tool within the last N seconds."""
         pass
 
@@ -23,12 +27,13 @@ class StateRepository(ABC):
     async def set_state(self, tool_name: str, state: CircuitState) -> None:
         """Update circuit state for a tool."""
         pass
-        
+
     @abstractmethod
     async def get_consecutive_failures(self, tool_name: str) -> int:
         """Get number of consecutive failures."""
         pass
-    
+
+    @abstractmethod
     async def increment_failures(self, tool_name: str) -> None:
         """Increment consecutive failure count."""
         pass

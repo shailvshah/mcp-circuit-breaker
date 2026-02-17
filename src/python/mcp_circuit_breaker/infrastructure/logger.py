@@ -1,9 +1,12 @@
 import sys
+
 from loguru import logger
+
 from .config import Settings
 
-def configure_logger(settings: Settings):
+
+def configure_logger(settings: Settings) -> None:
     logger.remove()
     logger.add(sys.stderr, level="INFO")
-    # You could add file logging here if needed based on settings
-    # logger.add("circuit_breaker.log", rotation="10 MB")
+    # Enable file logging for debugging integration issues
+    logger.add("/tmp/mcp_circuit_breaker.log", rotation="1 MB", level="DEBUG")
