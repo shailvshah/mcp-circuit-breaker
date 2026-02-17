@@ -18,7 +18,10 @@ requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry]
-packages = [{include = "mcp_circuit_breaker", from = "src/python"}]
+packages = [
+    {include = "mcp_circuit_breaker", from = "src/python"},
+    {include = "core", from = "src"}
+]
 
 [tool.poetry.scripts]
 mcp-circuit-breaker = "mcp_circuit_breaker.main:main"

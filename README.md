@@ -84,6 +84,50 @@ graph LR
     end
 ```
 
+## 🎯 Anthropic Skills Integration
+
+The circuit breaker is also available as a **standalone Anthropic Skill** that works independently of MCP infrastructure.
+
+### What is an Anthropic Skill?
+
+Anthropic Skills are structured capabilities that Claude can use across all environments (claude.ai, Claude Code, API). The circuit breaker skill provides the same protection patterns without requiring MCP setup.
+
+### Using the Skill
+
+The skill is located in `src/skills/circuit-breaker/` and includes:
+
+- **SKILL.md**: Main skill documentation with YAML frontmatter
+- **scripts/**: Standalone validation and execution tools
+- **references/**: Detailed strategy patterns and error catalogs
+- **assets/**: Ready-to-use configuration templates
+
+### Quick Start (Skill)
+
+1. **Validation**: Test a configuration
+   ```bash
+   cd src/skills/circuit-breaker
+   python scripts/validate_config.py assets/config_template.json
+   ```
+
+2. **Execution**: Test if a tool would be blocked
+   ```bash
+   python scripts/apply_strategy.py \
+     --config assets/config_template.json \
+     write_file \
+     --arguments '{"path": "/etc/passwd"}'
+   ```
+
+### When to Use MCP vs Skills
+
+| Feature | MCP Server | Anthropic Skill |
+|---------|------------|-----------------|
+| **Use Case** | Protect MCP tool calls | General circuit breaker guidance |
+| **Integration** | Middleware for MCP servers | Standalone or in Claude environments |
+| **Execution** | Automatic interception | Manual application or guidance |
+| **Best For** | Production MCP deployments | Development, learning, non-MCP use cases |
+
+See [src/skills/circuit-breaker/README.md](src/skills/circuit-breaker/README.md) for detailed skill documentation.
+
 ## 🤝 Contributing
 
 1.  Clone the repo.

@@ -1,0 +1,164 @@
+{
+    "description": "Circuit breaker configuration templates for common scenarios",
+    "templates": {
+        "development": {
+            "name": "Development Environment",
+            "description": "Lenient settings for development and testing",
+            "config": {
+                "strategies": [
+                    "cool-off"
+                ],
+                "failure_threshold": 5,
+                "reset_timeout": 10,
+                "window_seconds": 60,
+                "max_requests_per_window": 30
+            }
+        },
+        "production_api": {
+            "name": "Production API Gateway",
+            "description": "Comprehensive protection for production API calls",
+            "config": {
+                "strategies": [
+                    "strict",
+                    "semantic",
+                    "cool-off"
+                ],
+                "strict_blocklist": [
+                    "^delete_.*",
+                    "^admin_.*",
+                    "^drop_.*"
+                ],
+                "semantic_patterns": {
+                    "rate limit": "block",
+                    "429": "block",
+                    "401": "block",
+                    "403": "block",
+                    "404": "block",
+                    "quota exceeded": "block"
+                },
+                "failure_threshold": 3,
+                "reset_timeout": 30,
+                "window_seconds": 60,
+                "max_requests_per_window": 20
+            }
+        },
+        "read_only": {
+            "name": "Read-Only Mode",
+            "description": "Block all write operations, allow reads",
+            "config": {
+                "strategies": [
+                    "strict"
+                ],
+                "strict_blocklist": [
+                    "^write_.*",
+                    "^delete_.*",
+                    "^update_.*",
+                    "^create_.*",
+                    "^modify_.*",
+                    "^remove_.*"
+                ]
+            }
+        },
+        "openai_protection": {
+            "name": "OpenAI API Protection",
+            "description": "Protect against OpenAI-specific errors and rate limits",
+            "config": {
+                "strategies": [
+                    "semantic",
+                    "cool-off"
+                ],
+                "semantic_patterns": {
+                    "Rate limit reached": "block",
+                    "insufficient_quota": "block",
+                    "model_not_found": "block",
+                    "invalid_api_key": "block",
+                    "context_length_exceeded": "block"
+                },
+                "failure_threshold": 3,
+                "reset_timeout": 60,
+                "window_seconds": 60,
+                "max_requests_per_window": 10
+            }
+        },
+        "database_protection": {
+            "name": "Database Protection",
+            "description": "Protect against database errors and connection issues",
+            "config": {
+                "strategies": [
+                    "strict",
+                    "semantic",
+                    "cool-off"
+                ],
+                "strict_blocklist": [
+                    "^drop_.*",
+                    "^truncate_.*",
+                    "execute_raw_sql"
+                ],
+                "semantic_patterns": {
+                    "connection refused": "block",
+                    "authentication failed": "block",
+                    "database .* does not exist": "block",
+                    "deadlock detected": "block"
+                },
+                "failure_threshold": 5,
+                "reset_timeout": 30,
+                "window_seconds": 60,
+                "max_requests_per_window": 50
+            }
+        },
+        "high_security": {
+            "name": "High Security Environment",
+            "description": "Maximum protection with strict policies",
+            "config": {
+                "strategies": [
+                    "strict",
+                    "semantic",
+                    "cool-off"
+                ],
+                "strict_blocklist": [
+                    "^write_.*",
+                    "^delete_.*",
+                    "^execute_.*",
+                    "^run_.*",
+                    "^admin_.*"
+                ],
+                "semantic_patterns": {
+                    "error": "block",
+                    "failed": "block",
+                    "denied": "block"
+                },
+                "failure_threshold": 1,
+                "reset_timeout": 300,
+                "window_seconds": 60,
+                "max_requests_per_window": 5
+            }
+        },
+        "aggressive_rate_limit": {
+            "name": "Aggressive Rate Limiting",
+            "description": "Strict rate limiting with quick recovery",
+            "config": {
+                "strategies": [
+                    "cool-off"
+                ],
+                "failure_threshold": 2,
+                "reset_timeout": 5,
+                "window_seconds": 30,
+                "max_requests_per_window": 5
+            }
+        },
+        "lenient_protection": {
+            "name": "Lenient Protection",
+            "description": "Allow more retries, longer recovery time",
+            "config": {
+                "strategies": [
+                    "cool-off"
+                ],
+                "failure_threshold": 10,
+                "reset_timeout": 120,
+                "window_seconds": 120,
+                "max_requests_per_window": 50
+            }
+        }
+    },
+    "usage": "Select a template and customize the config values as needed. Save to a JSON file and use with validate_config.py or apply_strategy.py scripts."
+}
